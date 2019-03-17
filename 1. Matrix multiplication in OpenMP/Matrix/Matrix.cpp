@@ -20,6 +20,11 @@ Matrix::Matrix(size_t numRows, size_t numColumns) {
 
 Matrix::~Matrix() = default;
 
+void Matrix::setNumThreads(int numThreads) {
+    omp_set_dynamic(0);
+    omp_set_num_threads(numThreads);
+    this->numThreads = numThreads;
+}
 
 size_t Matrix::getNumRows() const {
     return numRows;
@@ -114,23 +119,31 @@ double Matrix::getExecutingTimeWithOmp() {
 }
 
 void Matrix::initExecutingTimeWithoutOmp() {
-   this->executingTimeWithoutOmp = clock();
+    this->executingTimeWithoutOmp = clock();
 }
 
 void Matrix::setExecutingTimeWithoutOmp() {
-    this->executingTimeWithoutOmp = (clock() - omp_get_wtime())/double(CLOCKS_PER_SEC);
+    this->executingTimeWithoutOmp = (clock() - omp_get_wtime()) / double(CLOCKS_PER_SEC);
 }
 
 double Matrix::getExecutingTimeWithoutOmp() {
     return this->executingTimeWithoutOmp;
 }
 
+void Matrix::multiplyTwoMatrices() { //TODO
+    for (size_t i = 0; i < this->numRows; i++) {
+        for (size_t j = 0; j < this->numColumns; j++) {
+            for (size_t k = 0; k < this->numRows; k++) {
+                this->resultMatrix[i][j] += this->firstMatrix[i][k] * this->secondMatrix[k][j];
+            }
+        }
+    }
+}
 
-void Matrix::multiplyTwoMatricesWithOmp() {
+void Matrix::multiplyTwoMatricesWithOmpDefault() {
     initExecutingTimeWithOmp();
 #pragma omp parallel
     {
-#pragma omp for
         for (size_t i = 0; i < this->numRows; i++) {
             for (size_t j = 0; j < this->numColumns; j++) {
                 for (size_t k = 0; k < this->numRows; k++) {
@@ -141,6 +154,74 @@ void Matrix::multiplyTwoMatricesWithOmp() {
     }
     setExecutingTimeWithOmp();
 }
+
+void Matrix::multiplyTwoMatricesWithOmpStatic(int numThreads, size_t chunkSize) {
+    setNumThreads(numThreads);
+    initExecutingTimeWithOmp();
+#pragma omp parallel
+    {
+#pragma omp for schedule(static, chunkSize)
+        for (size_t i = 0; i < this->numRows; i++) {
+            for (size_t j = 0; j < this->numColumns; j++) {
+                for (size_t k = 0; k < this->numRows; k++) {
+                    this->resultMatrix[i][j] += this->firstMatrix[i][k] * this->secondMatrix[k][j];
+                }
+            }
+        }
+    }
+    setExecutingTimeWithOmp();
+}
+
+void Matrix::multiplyTwoMatricesWithOmpDynamic(int numThreads, size_t chunkSize) {
+    setNumThreads(numThreads);
+    initExecutingTimeWithOmp();
+#pragma omp parallel
+    {
+#pragma omp for schedule(dynamic, chunkSize)
+        for (size_t i = 0; i < this->numRows; i++) {
+            for (size_t j = 0; j < this->numColumns; j++) {
+                for (size_t k = 0; k < this->numRows; k++) {
+                    this->resultMatrix[i][j] += this->firstMatrix[i][k] * this->secondMatrix[k][j];
+                }
+            }
+        }
+    }
+    setExecutingTimeWithOmp();
+}
+
+void Matrix::multiplyTwoMatricesWithOmpGuided(int numThreads, size_t chunkSize) {
+    setNumThreads(numThreads);
+    initExecutingTimeWithOmp();
+#pragma omp parallel
+    {
+#pragma omp for schedule(guided, chunkSize)
+        for (size_t i = 0; i < this->numRows; i++) {
+            for (size_t j = 0; j < this->numColumns; j++) {
+                for (size_t k = 0; k < this->numRows; k++) {
+                    this->resultMatrix[i][j] += this->firstMatrix[i][k] * this->secondMatrix[k][j];
+                }
+            }
+        }
+    }
+    setExecutingTimeWithOmp();
+}
+
+//void Matrix::multiplyTwoMatricesWithOmpRuntime(int numThreads, size_t chunkSize) { //TODO
+//    setNumThreads(numThreads);
+//    initExecutingTimeWithOmp();
+//#pragma omp parallel
+//    {
+//#pragma omp for schedule(runtime, chunkSize)
+//        for (size_t i = 0; i < this->numRows; i++) {
+//            for (size_t j = 0; j < this->numColumns; j++) {
+//                for (size_t k = 0; k < this->numRows; k++) {
+//                    this->resultMatrix[i][j] += this->firstMatrix[i][k] * this->secondMatrix[k][j];
+//                }
+//            }
+//        }
+//    }
+//    setExecutingTimeWithOmp();
+//}
 
 void Matrix::multiplyTwoMatricesWithoutOmp() {
     initExecutingTimeWithoutOmp();
@@ -153,11 +234,5 @@ void Matrix::multiplyTwoMatricesWithoutOmp() {
     }
     setExecutingTimeWithoutOmp();
 }
-
-
-
-
-
-
 
 

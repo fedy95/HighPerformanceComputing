@@ -15,13 +15,28 @@ public:
 
     void showFirstMatrix(), showSecondMatrix(), showResultMatrix();
 
-    double getExecutingTimeWithOmp(), getExecutingTimeWithoutOmp();
+    double getExecutingTimeWithOmp();
 
-    void multiplyTwoMatricesWithOmp(), multiplyTwoMatricesWithoutOmp();
+    double getExecutingTimeWithoutOmp();
+
+    void multiplyTwoMatricesWithOmpDefault();
+
+    void multiplyTwoMatricesWithoutOmp();
+
+    void multiplyTwoMatricesWithOmpStatic(int numThreads, size_t chunkSize);
+
+    void multiplyTwoMatricesWithOmpDynamic(int numThreads, size_t chunkSize);
+
+    void multiplyTwoMatricesWithOmpGuided(int numThreads, size_t chunkSize);
+
+    void multiplyTwoMatricesWithOmpRuntime(int numThreads, size_t chunkSize);
 
 private:
     size_t numRows, numColumns;
+    int numThreads;
+
     int **firstMatrix, **secondMatrix, **resultMatrix;
+    double executingTimeWithOmp, executingTimeWithoutOmp;
 
     void setNumRows(size_t numRows);
 
@@ -31,11 +46,17 @@ private:
 
     void setFirstMatrix(), setSecondMatrix();
 
-    void initExecutingTimeWithOmp(), initExecutingTimeWithoutOmp();
+    void initExecutingTimeWithOmp();
 
-    void setExecutingTimeWithOmp(), setExecutingTimeWithoutOmp();
+    void initExecutingTimeWithoutOmp();
 
-    double executingTimeWithOmp, executingTimeWithoutOmp;
+    void setExecutingTimeWithOmp();
+
+    void setExecutingTimeWithoutOmp();
+
+    void multiplyTwoMatrices();
+
+    void setNumThreads(int numThreads);
 };
 
 #endif
