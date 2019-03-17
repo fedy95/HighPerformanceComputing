@@ -2,6 +2,17 @@
 [Table of contents](https://github.com/fedy95/HighPerformanceComputing/blob/master/README.md)
 
 ## Used hardware
+- VMware Workstation 15 Player (15.0.2 build-10952284);
+- OS: linuxmint-19.1-mate-64bit;
+- CPU: Ryzen 1700 3,82 GHz:
+  - Number of processor cores: 4.
+- RAM: 16384 MB DDR4-2933MHz:
+  - DRAM CAS# Latency: 16,
+  - Trcdrd: 17;
+  - Trcdwr: 17;
+	- DRAM RAS# PRE Time: 17;
+	- DRAM RAS# ACT Time: 33.
+
 ## Used software
 
 ### Problem
