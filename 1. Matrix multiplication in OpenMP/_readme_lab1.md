@@ -10,8 +10,8 @@
   - DRAM CAS# Latency: 16,
   - Trcdrd: 17;
   - Trcdwr: 17;
-	- DRAM RAS# PRE Time: 17;
-	- DRAM RAS# ACT Time: 33.
+  - DRAM RAS# PRE Time: 17;
+  - DRAM RAS# ACT Time: 33.
 
 ## Used software
 
