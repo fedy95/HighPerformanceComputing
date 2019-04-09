@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <vector>
 #include <iostream>
-
 #include <fstream>
 
 #include "Matrix/Matrix.h"

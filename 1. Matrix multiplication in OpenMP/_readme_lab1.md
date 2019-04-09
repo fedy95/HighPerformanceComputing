@@ -29,3 +29,5 @@ Task:
 6) https://software.intel.com/ru-ru/articles/getting-started-with-openmp
 7) https://software.intel.com/ru-ru/articles/more-work-sharing-with-openmp
 8) https://en.wikipedia.org/wiki/SPMD
+
+9) [Google tests](https://www.srcmake.com/home/google-cpp-test-framework)
