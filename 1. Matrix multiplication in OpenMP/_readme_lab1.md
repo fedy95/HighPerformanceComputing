@@ -4,7 +4,7 @@
 ## Used software
 - VMware Workstation 15 Player (15.0.2 build-10952284);
 - OS: KDE Neon 5.15 64bit;
-- clang: 1:6.0-41~exp5~ubuntu1
+- clang: 1:6.0-41-exp5-ubuntu1
 - cmake: 3.10.2-1ubuntu2
 - g++: 4:7.4.0-1ubuntu2.2
 - gcc: 4:7.4.0-1ubuntu2.2
