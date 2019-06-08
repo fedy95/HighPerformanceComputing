@@ -1,6 +1,7 @@
 #include <iostream>
 #include <omp.h>
 #include <ctime>
+#include <cmath>
 
 #include "Matrix.h"
 
@@ -26,12 +27,35 @@ void Matrix::setNumThreads(int numThreads) {
     this->numThreads = numThreads;
 }
 
+void Matrix::setNumRows(size_t numRows) {
+    this->numRows = numRows;
+}
+
 size_t Matrix::getNumRows() const {
     return numRows;
 }
 
+void Matrix::setNumColumns(size_t numColumns) {
+    this->numColumns = numColumns;
+}
+
 size_t Matrix::getNumColumns() const {
     return numColumns;
+}
+
+void Matrix::initFirstMatrix() {
+    this->firstMatrix = new int *[this->numRows];
+    for (size_t i = 0; i < this->numColumns; i++) {
+        this->firstMatrix[i] = new int[this->numRows];
+    }
+}
+
+void Matrix::setFirstMatrix() {
+    for (size_t i = 0; i < this->numColumns; i++) {
+        for (size_t j = 0; j < this->numRows; j++) {
+            this->firstMatrix[i][j] = rand();
+        }
+    }
 }
 
 void Matrix::showFirstMatrix() {
@@ -40,6 +64,21 @@ void Matrix::showFirstMatrix() {
             cout << firstMatrix[i][j] << " ";
         }
         cout << endl;
+    }
+}
+
+void Matrix::initSecondMatrix() {
+    this->secondMatrix = new int *[this->numColumns];
+    for (size_t i = 0; i < this->numRows; i++) {
+        this->secondMatrix[i] = new int[this->numColumns];
+    }
+}
+
+void Matrix::setSecondMatrix() {
+    for (size_t i = 0; i < this->numRows; i++) {
+        for (size_t j = 0; j < this->numColumns; j++) {
+            this->secondMatrix[i][j] = rand();
+        }
     }
 }
 
@@ -52,6 +91,13 @@ void Matrix::showSecondMatrix() {
     }
 }
 
+void Matrix::initResultMatrix() {
+    this->resultMatrix = new int *[this->numColumns];
+    for (size_t i = 0; i < this->numColumns; i++) {
+        this->resultMatrix[i] = new int[this->numColumns];
+    }
+}
+
 void Matrix::showResultMatrix() {
     for (size_t i = 0; i < this->numRows; i++) {
         for (size_t j = 0; j < this->numRows; j++) {
@@ -61,50 +107,6 @@ void Matrix::showResultMatrix() {
     }
 }
 
-void Matrix::setNumRows(size_t numRows) {
-    this->numRows = numRows;
-}
-
-void Matrix::setNumColumns(size_t numColumns) {
-    this->numColumns = numColumns;
-}
-
-void Matrix::initFirstMatrix() {
-    this->firstMatrix = new int *[this->numRows];
-    for (size_t i = 0; i < this->numColumns; i++) {
-        this->firstMatrix[i] = new int[this->numRows];
-    }
-}
-
-void Matrix::initSecondMatrix() {
-    this->secondMatrix = new int *[this->numColumns];
-    for (size_t i = 0; i < this->numRows; i++) {
-        this->secondMatrix[i] = new int[this->numColumns];
-    }
-}
-
-void Matrix::initResultMatrix() {
-    this->resultMatrix = new int *[this->numColumns];
-    for (size_t i = 0; i < this->numColumns; i++) {
-        this->resultMatrix[i] = new int[this->numColumns];
-    }
-}
-
-void Matrix::setFirstMatrix() {
-    for (size_t i = 0; i < this->numColumns; i++) {
-        for (size_t j = 0; j < this->numRows; j++) {
-            this->firstMatrix[i][j] = rand();
-        }
-    }
-}
-
-void Matrix::setSecondMatrix() {
-    for (size_t i = 0; i < this->numRows; i++) {
-        for (size_t j = 0; j < this->numColumns; j++) {
-            this->secondMatrix[i][j] = rand();
-        }
-    }
-}
 
 void Matrix::initExecutingTimeWithOmp() {
     this->executingTimeWithOmp = omp_get_wtime();
@@ -128,16 +130,6 @@ void Matrix::setExecutingTimeWithoutOmp() {
 
 double Matrix::getExecutingTimeWithoutOmp() {
     return this->executingTimeWithoutOmp;
-}
-
-void Matrix::multiplyTwoMatrices() { //TODO
-    for (size_t i = 0; i < this->numRows; i++) {
-        for (size_t j = 0; j < this->numColumns; j++) {
-            for (size_t k = 0; k < this->numRows; k++) {
-                this->resultMatrix[i][j] += this->firstMatrix[i][k] * this->secondMatrix[k][j];
-            }
-        }
-    }
 }
 
 void Matrix::multiplyTwoMatricesWithOmpDefault() {
@@ -206,22 +198,26 @@ void Matrix::multiplyTwoMatricesWithOmpGuided(int numThreads, size_t chunkSize) 
     setExecutingTimeWithOmp();
 }
 
-//void Matrix::multiplyTwoMatricesWithOmpRuntime(int numThreads, size_t chunkSize) { //TODO
-//    setNumThreads(numThreads);
-//    initExecutingTimeWithOmp();
-//#pragma omp parallel
-//    {
-//#pragma omp for schedule(runtime, chunkSize)
-//        for (size_t i = 0; i < this->numRows; i++) {
-//            for (size_t j = 0; j < this->numColumns; j++) {
-//                for (size_t k = 0; k < this->numRows; k++) {
-//                    this->resultMatrix[i][j] += this->firstMatrix[i][k] * this->secondMatrix[k][j];
-//                }
-//            }
-//        }
-//    }
-//    setExecutingTimeWithOmp();
-//}
+void Matrix::multiplyTwoMatricesWithOmpRuntime(int numThreads) {
+    setNumThreads(numThreads);
+    initExecutingTimeWithOmp();
+    int rowsPerThread = ceil(this->numColumns * 1. / numThreads);
+#pragma omp parallel
+    {
+        int threadNum = omp_get_thread_num();
+        size_t rowBegin = threadNum * rowsPerThread;
+        size_t rowEnd = rowBegin + rowsPerThread;
+
+        for (size_t i = rowBegin; i < min(rowEnd, this->numRows); i++) {
+            for (size_t j = 0; j < this->numColumns; j++) {
+                for (size_t k = 0; k < this->numRows; k++) {
+                    this->resultMatrix[i][j] += this->firstMatrix[i][k] * this->secondMatrix[k][j];
+                }
+            }
+        }
+    }
+    setExecutingTimeWithOmp();
+}
 
 void Matrix::multiplyTwoMatricesWithoutOmp() {
     initExecutingTimeWithoutOmp();

@@ -29,7 +29,7 @@ public:
 
     void multiplyTwoMatricesWithOmpGuided(int numThreads, size_t chunkSize);
 
-    void multiplyTwoMatricesWithOmpRuntime(int numThreads, size_t chunkSize);
+    void multiplyTwoMatricesWithOmpRuntime(int numThreads);
 
 private:
     size_t numRows, numColumns;
@@ -53,8 +53,6 @@ private:
     void setExecutingTimeWithOmp();
 
     void setExecutingTimeWithoutOmp();
-
-    void multiplyTwoMatrices();
 
     void setNumThreads(int numThreads);
 };
