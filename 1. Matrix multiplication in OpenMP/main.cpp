@@ -67,6 +67,11 @@ int main() {
         }
 
         resultsAll.close();
+        resultsWithoutOmp.close();
+        resultsStatic.close();
+        resultsDynamic.close();
+        resultsGuided.close();
+        resultsRuntime.close();
         return 0;
     } else {
         cout << "Couldn't generate file" << endl;

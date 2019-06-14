@@ -125,7 +125,7 @@ void Matrix::initExecutingTimeWithoutOmp() {
 }
 
 void Matrix::setExecutingTimeWithoutOmp() {
-    this->executingTimeWithoutOmp = (clock() - omp_get_wtime()) / double(CLOCKS_PER_SEC);
+    this->executingTimeWithoutOmp = (clock() - this->executingTimeWithoutOmp) / double(CLOCKS_PER_SEC);
 }
 
 double Matrix::getExecutingTimeWithoutOmp() {
