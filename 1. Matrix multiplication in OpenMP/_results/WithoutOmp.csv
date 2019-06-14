@@ -1,4 +1,4 @@
-method;N;M;threads;chunkSize;Executing time;
+method;N;M;threads;chunkSize;ExecutingTime;
 WithoutOmp;10;10;1;not defined;0.0781741;
 WithoutOmp;20;20;1;not defined;0.467122;
 WithoutOmp;30;30;1;not defined;1.36918;

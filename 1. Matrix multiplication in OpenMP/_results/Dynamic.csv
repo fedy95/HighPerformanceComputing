@@ -1,4 +1,4 @@
-method;N;M;threads;chunkSize;Executing time;
+method;N;M;threads;chunkSize;ExecutingTime;
 Dynamic;10;10;1;1;5.681e-06;
 Dynamic;10;10;2;1;5.62e-06;
 Dynamic;10;10;3;1;4.027e-06;

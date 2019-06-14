@@ -19,12 +19,12 @@ int main() {
 
     if (resultsAll.is_open() && resultsWithoutOmp.is_open() && resultsStatic.is_open() && resultsDynamic.is_open() &&
             resultsGuided.is_open() && resultsRuntime.is_open()) {
-        resultsAll << "method;N;M;threads;chunkSize;Executing time;" << endl;
-        resultsWithoutOmp << "method;N;M;threads;chunkSize;Executing time;" << endl;
-        resultsStatic << "method;N;M;threads;chunkSize;Executing time;" << endl;
-        resultsDynamic << "method;N;M;threads;chunkSize;Executing time;" << endl;
-        resultsGuided << "method;N;M;threads;chunkSize;Executing time;" << endl;
-        resultsRuntime << "method;N;M;threads;chunkSize;Executing time;" << endl;
+        resultsAll << "method;N;M;threads;chunkSize;ExecutingTime;" << endl;
+        resultsWithoutOmp << "method;N;M;threads;chunkSize;ExecutingTime;" << endl;
+        resultsStatic << "method;N;M;threads;chunkSize;ExecutingTime;" << endl;
+        resultsDynamic << "method;N;M;threads;chunkSize;ExecutingTime;" << endl;
+        resultsGuided << "method;N;M;threads;chunkSize;ExecutingTime;" << endl;
+        resultsRuntime << "method;N;M;threads;chunkSize;ExecutingTime;" << endl;
 
         for (size_t matrixSide = 10; matrixSide <= 500; matrixSide += 10) {
             auto *matrix = new Matrix(matrixSide, matrixSide);

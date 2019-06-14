@@ -1,4 +1,4 @@
-method;N;M;threads;chunkSize;Executing time;
+method;N;M;threads;chunkSize;ExecutingTime;
 Static;10;10;1;1;7.254e-06;
 Static;10;10;2;1;9.8925e-05;
 Static;10;10;3;1;0.000128179;
